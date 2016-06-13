@@ -25,7 +25,7 @@ public class ProductResource extends BaseResource{
         Product product = new Product();
         product.setCreateTime(new Date());
         product.setId(1001l);
-        product.setCommonstatus(CommonStatus.ENABLES);
+        product.setCommonstatus(CommonStatus.ENABLED);
         product.setProductName("测试商品3324");
 
         List<Product> list = new ArrayList<Product>();

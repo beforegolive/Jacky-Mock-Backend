@@ -3,7 +3,7 @@ package com.thoughtworks.mock.tmb.b2b;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-public class Launcher {
+public class B2BLauncher {
     public static void main(String args[]) throws Exception{
         Server server = new Server(9527);
 
