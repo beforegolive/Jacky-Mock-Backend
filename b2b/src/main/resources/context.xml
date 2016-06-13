@@ -1,0 +1,70 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <import resource="classpath:common-context.xml"/>
+    <import resource="classpath:product-context.xml"/>
+
+    <context:annotation-config/>
+
+    <util:properties id="hibernateProps" location="classpath:hibernate.properties"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl"
+                  value="#{T(com.thoughtworks.tmb.common.util.ConfigUtil).getProperty('mysql.url')}"/>
+        <property name="user" value="#{T(com.thoughtworks.tmb.common.util.ConfigUtil).getProperty('mysql.user')}"/>
+        <property name="password" value="#{T(com.thoughtworks.tmb.common.util.ConfigUtil).getProperty('mysql.password')}"/>
+
+        <property name="minPoolSize" value="2"/>
+        <property name="maxPoolSize" value="60"/>
+        <property name="acquireIncrement" value="3"/>
+
+        <property name="testConnectionOnCheckin" value="true"/>
+        <property name="maxIdleTimeExcessConnections" value="240"/>
+        <property name="idleConnectionTestPeriod" value="300"/>
+    </bean>
+
+    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate" depends-on="dataSource">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="encoding" value="UTF-8"/>
+        <property name="outOfOrder" value="true"/>
+        <property name="locations">
+            <array>
+                <value>classpath:db_migrations</value>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          depends-on="flyway">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan">
+            <array>
+                <value>com.thoughtworks.tmb.product.model</value>
+            </array>
+        </property>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties" ref="hibernateProps"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+</beans>

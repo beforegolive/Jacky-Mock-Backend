@@ -1,0 +1,27 @@
+group 'thoughtworks.mock'
+version '1.0'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+def env = System.getProperty("profile") ?: "dev"
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources", "src/main/profile/$env"]
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    compile project(':common')
+    compile project(':product')
+}

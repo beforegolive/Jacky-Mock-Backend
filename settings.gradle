@@ -1,0 +1,6 @@
+rootProject.name = 'tmb'
+include 'common'
+include 'b2b'
+include 'contract'
+include 'product'
+
