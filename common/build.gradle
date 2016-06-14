@@ -60,7 +60,9 @@ dependencies {
             [group:'org.flywaydb', name:'flyway-core', version:'4.0'],
             [group:'org.eclipse.jetty', name:'jetty-server', version:'9.2.10.v20150310'],
             [group:'org.eclipse.jetty', name:'jetty-webapp', version:'9.2.10.v20150310'],
-            [group:'org.eclipse.jetty', name:'jetty-servlet', version:'9.2.10.v20150310']
+            [group:'org.eclipse.jetty', name:'jetty-servlet', version:'9.2.10.v20150310'],
+            [group:'joda-time', name:'joda-time', version:'2.9.4']
+
 
     )
 }

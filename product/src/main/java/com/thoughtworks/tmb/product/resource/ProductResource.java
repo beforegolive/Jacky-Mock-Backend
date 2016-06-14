@@ -6,6 +6,7 @@ import com.thoughtworks.mock.tmb.entity.Product;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -19,6 +20,17 @@ public class ProductResource extends BaseResource{
     public Response getProductList(){
         List<Product> list = prepareProductList();
         return Response.ok().entity(list).build();
+    }
+
+    @GET
+    @Path("/empty")
+    public Response getProductEmptyList(){
+        return Response.ok().entity(new ArrayList(0)).build();
+    }
+
+    @POST
+    public Response createProduct(Product product){
+        return Response.ok().build();
     }
 
     private List<Product> prepareProductList() {
