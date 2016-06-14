@@ -1,8 +1,10 @@
 package com.thoughtworks.tmb.product.resource;
 
-import com.thoughtworks.mock.tmb.enums.CommonStatus;
-import com.thoughtworks.tmb.common.resource.BaseResource;
 import com.thoughtworks.mock.tmb.entity.Product;
+import com.thoughtworks.mock.tmb.service.ProductService;
+import com.thoughtworks.tmb.common.resource.BaseResource;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
@@ -10,15 +12,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Path("product")
 @Component
 public class ProductResource extends BaseResource{
+
+    @Autowired
+    ProductService productService;
+
     @GET
     public Response getProductList(){
-        List<Product> list = prepareProductList();
+        List<Product> list = productService.getAllProduct();
         return Response.ok().entity(list).build();
     }
 
@@ -30,18 +35,16 @@ public class ProductResource extends BaseResource{
 
     @POST
     public Response createProduct(Product product){
+        Exception exception = checkRequestParam(product);
+        if(exception != null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(exception).build();
+        }
         return Response.ok().build();
     }
 
-    private List<Product> prepareProductList() {
-        Product product = new Product();
-        product.setCreateTime(new Date());
-        product.setId(1001l);
-        product.setCommonstatus(CommonStatus.ENABLED);
-        product.setProductName("测试商品3324");
-
-        List<Product> list = new ArrayList<Product>();
-        list.add(product);
-        return list;
+    private Exception checkRequestParam(Product product) {
+        if(StringUtils.isEmpty(product.getProductName())) return new Exception("Product Name can't be empty.");
+        return null;
     }
+
 }
