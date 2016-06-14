@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class BaseEntity {
     private Long id;
-    private Date createTime;
-    private CommonStatus commonstatus;
+    private Date timeCreated;
+    private CommonStatus commonStatus;
 
     public Long getId() {
         return id;
@@ -17,19 +17,19 @@ public class BaseEntity {
         this.id = id;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
-    public CommonStatus getCommonstatus() {
-        return commonstatus;
+    public CommonStatus getCommonStatus() {
+        return commonStatus;
     }
 
-    public void setCommonstatus(CommonStatus commonstatus) {
-        this.commonstatus = commonstatus;
+    public void setCommonStatus(CommonStatus commonStatus) {
+        this.commonStatus = commonStatus;
     }
 }
